@@ -55,7 +55,7 @@ async function getOfficialPlayerPhotos(): Promise<Map<string, string>> {
       if (photo) photos.set(batch[index][0], photo);
     });
   }
-  console.info(\`[squad] Official Trabzonspor portraits resolved: \${photos.size}/\${profiles.size}\`);
+  console.info("[squad] Official Trabzonspor portraits resolved: " + photos.size + "/" + profiles.size);
   return photos;
 }
 
