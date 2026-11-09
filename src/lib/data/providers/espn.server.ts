@@ -22,11 +22,11 @@ function normalizePlayerName(value: string): string {
 function imageFromOfficialProfile(html: string): string | null {
   const og = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)?.[1]
     ?? html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)?.[1];
-  const cdn = html.match(/https?:\\/\\/cdn\\.trabzonspor\\.org\\.tr\\/[^"'\\s<>]+?\\.(?:png|jpe?g|webp)/i)?.[0];
-  const src = html.match(/(?:src|data-src)=["']([^"']*cdn\\.trabzonspor\\.org\\.tr[^"']+\\.(?:png|jpe?g|webp)[^"']*)["']/i)?.[1];
+  const cdn = html.match(/https?:\/\/cdn\.trabzonspor\.org\.tr\/[^"'\s<>]+?\.(?:png|jpe?g|webp)/i)?.[0];
+  const src = html.match(/(?:src|data-src)=["']([^"']*cdn\.trabzonspor\.org\.tr[^"']+\.(?:png|jpe?g|webp)[^"']*)["']/i)?.[1];
   const value = og || src || cdn;
   if (!value) return null;
-  try { return new URL(decodeHtml(value.replace(/\\\\\\//g, "/")), "https://www.trabzonspor.org.tr").toString(); }
+  try { return new URL(decodeHtml(value.replace(/\\\//g, "/")), "https://www.trabzonspor.org.tr").toString(); }
   catch { return null; }
 }
 
@@ -34,14 +34,14 @@ function imageFromOfficialProfile(html: string): string | null {
 async function getOfficialPlayerPhotos(): Promise<Map<string, string>> {
   const html = await fetchText(OFFICIAL_TEAM_PAGE);
   const photos = new Map<string, string>();
-  const anchors = html.match(/<a\\b[^>]*>[\\s\\S]*?<\\/a>/gi) ?? [];
+  const anchors = html.match(/<a\b[^>]*>[\s\S]*?<\/a>/gi) ?? [];
   const profiles = new Map<string, string>();
   for (const anchor of anchors) {
-    const href = anchor.match(/href=["']([^"']*(?:branslar|branches)\\/[^"']*(?:a-team-5|a-takimi-5|football|futbol)[^"']*)["']/i)?.[1];
+    const href = anchor.match(/href=["']([^"']*(?:branslar|branches)\/[^"']*(?:a-team-5|a-takimi-5|football|futbol)[^"']*)["']/i)?.[1];
     if (!href) continue;
-    const text = decodeHtml(anchor.replace(/<[^>]+>/g, " ")).replace(/\\s+/g, " ").trim();
+    const text = decodeHtml(anchor.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
     const slug = decodeURIComponent(href.split(/[/?#]/).filter(Boolean).pop() ?? "");
-    const name = text || slug.replace(/-\\d+$/, "").replace(/-/g, " ");
+    const name = text || slug.replace(/-\d+$/, "").replace(/-/g, " ");
     if (slug && name) profiles.set(normalizePlayerName(name), new URL(decodeHtml(href), "https://www.trabzonspor.org.tr").toString());
   }
 
@@ -55,7 +55,7 @@ async function getOfficialPlayerPhotos(): Promise<Map<string, string>> {
       if (photo) photos.set(batch[index][0], photo);
     });
   }
-  console.info(`[squad] Official Trabzonspor portraits resolved: ${photos.size}/${profiles.size}`);
+  console.info(\`[squad] Official Trabzonspor portraits resolved: \${photos.size}/\${profiles.size}\`);
   return photos;
 }
 
