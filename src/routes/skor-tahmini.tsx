@@ -35,12 +35,12 @@ function Page() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const gradient = ctx.createLinearGradient(0, 0, 1080, 1350);
-    gradient.addColorStop(0, "#f4f1ed");
-    gradient.addColorStop(0.499, "#e9e5e0");
-    gradient.addColorStop(0.501, "#171719");
-    gradient.addColorStop(1, "#09090b");
+    gradient.addColorStop(0, "#5b0828");
+    gradient.addColorStop(1, "#102d55");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1350);
+    ctx.fillStyle = "#102d55";
+    ctx.beginPath(); ctx.moveTo(1080, 0); ctx.lineTo(1080, 1350); ctx.lineTo(0, 1350); ctx.closePath(); ctx.fill();
 
 
     const loadImage = (url?: string | null) => new Promise<HTMLImageElement | null>(resolve => {
@@ -52,7 +52,7 @@ function Page() {
       img.src = url;
     });
     const [homeLogo, awayLogo] = await Promise.all([
-      loadImage(match?.home.logo), loadImage(match?.away.logo)
+      loadImage(/trabzonspor/i.test(h) ? "https://commons.wikimedia.org/wiki/Special:Redirect/file/Trabzonspor_logosu.svg" : match?.home.logo), loadImage(/trabzonspor/i.test(a) ? "https://commons.wikimedia.org/wiki/Special:Redirect/file/Trabzonspor_logosu.svg" : match?.away.logo)
     ]);
     const drawCrest = (img: HTMLImageElement | null, x: number, y: number, removeDarkMatte = false) => {
       if (img) {
@@ -136,10 +136,10 @@ function Page() {
       </div>
 
       <div className="surface p-3">
-        <div className="relative mx-auto aspect-[4/5] w-full max-w-[540px] overflow-hidden rounded-xl border" style={{ background: "linear-gradient(135deg,#f4f1ed 0 50%,#171719 50% 100%)" }}>
+        <div className="relative mx-auto aspect-[4/5] w-full max-w-[540px] overflow-hidden rounded-xl border" style={{ background: "linear-gradient(135deg,#5b0828 0 50%,#102d55 50% 100%)" }}>
           <div className="relative grid h-[65%] grid-cols-2 items-center text-center">
-            <div className="flex flex-col items-center px-2 pt-5 text-black"><TeamCrest name={h} logo={match?.home.logo ?? null} size={150} className={/trabzonspor/i.test(h) ? "[mix-blend-mode:screen]" : ""}/><b className="mt-5 font-display text-xl font-black uppercase">{h}</b><strong className="mt-5 text-8xl font-black leading-none">{home}</strong></div>
-            <div className="flex flex-col items-center px-2 pt-5 text-white"><TeamCrest name={a} logo={match?.away.logo ?? null} size={150} className={/trabzonspor/i.test(a) ? "[mix-blend-mode:screen]" : ""}/><b className="mt-5 font-display text-xl font-black uppercase">{a}</b><strong className="mt-5 text-8xl font-black leading-none">{away}</strong></div>
+            <div className="flex flex-col items-center px-2 pt-5 text-white"><TeamCrest name={h} logo={match?.home.logo ?? null} size={150} /><b className="mt-5 font-display text-xl font-black uppercase">{h}</b><strong className="mt-5 text-8xl font-black leading-none">{home}</strong></div>
+            <div className="flex flex-col items-center px-2 pt-5 text-white"><TeamCrest name={a} logo={match?.away.logo ?? null} size={150} /><b className="mt-5 font-display text-xl font-black uppercase">{a}</b><strong className="mt-5 text-8xl font-black leading-none">{away}</strong></div>
           </div>
           <div className="absolute inset-x-0 bottom-0 bg-black/90 px-3 py-7 text-center text-white">
             <p className="font-display text-sm font-bold uppercase sm:text-lg">{competition} · {dateLabel} {timeLabel && "· " + timeLabel}</p>
