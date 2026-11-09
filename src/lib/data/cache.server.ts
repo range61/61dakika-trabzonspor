@@ -1,9 +1,8 @@
 /**
- * Tiny per-isolate TTL cache with in-flight de-duplication. Keeps us polite to
- * upstream providers; each entry also remembers when it was fetched.
+ * Tiny per-isolate TTL cache with in-flight de-duplication.
+ * If a refresh fails, serve the last successful value instead of blanking the UI.
  */
 type Entry = { value: unknown; fetchedAt: number; expires: number };
-
 const store = new Map<string, Entry>();
 const inflight = new Map<string, Promise<Entry>>();
 
@@ -15,18 +14,27 @@ export async function cached<T>(
 ): Promise<{ value: T; fetchedAt: string }> {
   const now = Date.now();
   const hit = store.get(key);
-  // A forced refresh still reuses entries younger than 10s so repeated clicks can't hammer upstream.
   const fresh = hit && (opts.force ? now - hit.fetchedAt < 10_000 : hit.expires > now);
   if (hit && fresh) {
     return { value: hit.value as T, fetchedAt: new Date(hit.fetchedAt).toISOString() };
   }
+
   let p = inflight.get(key);
   if (!p) {
     p = load()
       .then((value) => {
-        const entry = { value, fetchedAt: Date.now(), expires: Date.now() + ttlMs };
+        const fetchedAt = Date.now();
+        const entry = { value, fetchedAt, expires: fetchedAt + ttlMs };
         store.set(key, entry);
         return entry;
+      })
+      .catch((error) => {
+        // Stale-if-error: never discard a known-good snapshot because an upstream is down.
+        if (hit) {
+          console.warn(`[data-cache] Serving stale data for ${key} after refresh failure:`, error);
+          return hit;
+        }
+        throw error;
       })
       .finally(() => inflight.delete(key));
     inflight.set(key, p);
