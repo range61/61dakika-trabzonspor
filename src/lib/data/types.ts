@@ -120,6 +120,7 @@ export interface Player {
   name: string;
   jersey: string | null;
   position: PositionGroup;
+  positionDetail?: string;
   age: number | null;
   birthDate: string | null;
   nationality: string | null;
