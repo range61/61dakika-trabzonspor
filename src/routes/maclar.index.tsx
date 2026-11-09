@@ -1,32 +1,32 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Container, PageHeader } from "@/components/common/PageHeader";
-import { EmptyState, ListSkeleton, RouteError, Section } from "@/components/common/States";
-import { SourceBar } from "@/components/common/SourceBar";
-import { MatchRow } from "@/components/match/MatchBits";
-import { scheduleQuery } from "@/lib/data/queries";
-import { seo } from "@/lib/seo";
-
-export const Route = createFileRoute("/maclar/")({
-  head: () => seo("Trabzonspor maçları", "Trabzonspor fikstürü, maç sonuçları ve canlı maç merkezi."),
-  loader: ({ context }) => context.queryClient.ensureQueryData(scheduleQuery()).then(() => undefined),
-  component: MatchesPage,
-  errorComponent: RouteError,
-});
-
-function MatchesPage() {
-  return <Container className="py-8 sm:py-10"><PageHeader eyebrow="Maç merkezi" title="Fikstür ve sonuçlar" description="Trabzonspor'un oynadığı, oynayacağı ve devam eden maçlar." />
-    <Section errorTitle="Maç verileri yüklenemedi" fallback={<ListSkeleton rows={7} />}><Matches /></Section>
-  </Container>;
-}
-function Matches() {
-  const { data: env } = useSuspenseQuery(scheduleQuery());
-  const [filter, setFilter] = useState("all");
-  const rows = useMemo(() => [...env.data].filter(m => filter === "all" || (filter === "live" ? m.state === "in" : filter === "upcoming" ? m.state === "pre" || m.state === "postponed" : m.state === "post")).sort((a,b) => a.date.localeCompare(b.date) * (filter === "past" ? -1 : 1)), [env.data, filter]);
-  return <>
-    <div className="my-5 flex flex-wrap gap-2">{[["all","Tümü"],["live","Canlı"],["upcoming","Yaklaşan"],["past","Oynanan"]].map(([v,l]) => <button key={v} onClick={() => setFilter(v)} className={`rounded-full border px-4 py-2 text-sm ${filter===v ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground"}`}>{l}</button>)}</div>
-    {rows.length ? <div className="space-y-2">{rows.map(m => <MatchRow key={m.id} match={m} />)}</div> : <EmptyState title="Bu filtrede maç yok" message="Kaynakta gösterilecek maç bulunamadı." />}
-    <SourceBar className="mt-5" envelope={env} queryKey={["schedule"]} live={rows.some(m=>m.state==="in")} />
-  </>;
+import {useEffect,useMemo,useState} from "react";
+import {useSuspenseQuery} from "@tanstack/react-query";
+import {createFileRoute,Link} from "@tanstack/react-router";
+import {ArrowRight,Activity,Clock3,CalendarDays,Radio} from "lucide-react";
+import {Container} from "@/components/common/PageHeader";
+import {EmptyState,ListSkeleton,RouteError,Section} from "@/components/common/States";
+import {SourceBar} from "@/components/common/SourceBar";
+import {MatchRow} from "@/components/match/MatchBits";
+import {TeamCrest} from "@/components/common/TeamCrest";
+import {scheduleQuery} from "@/lib/data/queries";
+import {nextMatch,splitSchedule} from "@/lib/data/derive";
+import {seo} from "@/lib/seo";
+export const Route=createFileRoute("/maclar/")({head:()=>seo("Trabzonspor maç merkezi","Trabzonspor maç takvimi, canlı skorlar ve son maçlar."),loader:({context})=>context.queryClient.ensureQueryData(scheduleQuery()).then(()=>undefined),component:Page,errorComponent:RouteError});
+function Page(){return <Container className="py-7 sm:py-9"><Section errorTitle="Maç verileri yüklenemedi" fallback={<ListSkeleton rows={8}/>}><MatchCentre/></Section></Container>}
+function MatchCentre(){
+ const {data:env}=useSuspenseQuery(scheduleQuery());const parts=splitSchedule(env.data);const upcoming=nextMatch(env.data);const latest=parts.past[0]??null;const [now,setNow]=useState(Date.now());const [showAll,setShowAll]=useState(false);
+ useEffect(()=>{const timer=window.setInterval(()=>setNow(Date.now()),1000);return()=>window.clearInterval(timer)},[]);
+ const diff=upcoming?Math.max(0,new Date(upcoming.date).getTime()-now):0;const countdown=[[Math.floor(diff/86400000),"GÜN"],[Math.floor(diff%86400000/3600000),"SAAT"],[Math.floor(diff%3600000/60000),"DAKİKA"],[Math.floor(diff%60000/1000),"SANİYE"]];
+ const recent=parts.past.slice(0,20);const live=parts.live[0];
+ return <div className="match-centre">
+  <div className="mb-6 flex items-center justify-between gap-3 border-b border-border pb-4"><Link to="/" className="text-sm font-semibold hover:text-primary">Ana sayfa</Link><span className="flex items-center gap-2 text-xs text-muted-foreground"><span className="h-2 w-2 rounded-full bg-primary"/> 61DAKİKA MAÇ MERKEZİ</span></div>
+  <div className="mb-6"><p className="eyebrow">BORDO-MAVİ CANLI TAKİP</p><h1 className="mt-1 font-display text-4xl font-black uppercase sm:text-5xl">Maç merkezi</h1><p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">Sıradaki karşılaşma, canlı maç takibi, skorlar ve Trabzonspor'un son maçları tek ekranda.</p></div>
+  <section className="match-feature surface overflow-hidden p-5 sm:p-8">
+   <div className="flex items-center justify-between"><span className="eyebrow">{live?"CANLI KARŞILAŞMA":"SIRADAKİ MAÇ"}</span><span className={live?"rounded-full bg-red-500/15 px-3 py-1 text-xs font-bold text-red-400":"rounded-full border px-3 py-1 text-xs font-semibold text-muted-foreground"}>{live?"● CANLI":upcoming?"BAŞLAMADI":"PROGRAM BEKLENİYOR"}</span></div>
+   {upcoming?<><div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-8"><div className="flex min-w-0 flex-col items-center gap-3 text-center"><TeamCrest name={upcoming.home.name} logo={upcoming.home.logo} size={104} className="h-24 w-24 sm:h-28 sm:w-28"/><b className="font-display text-lg font-black uppercase sm:text-2xl">{upcoming.home.name}</b></div><div className="text-center"><strong className="font-display text-5xl font-black sm:text-7xl">VS</strong><p className="mt-1 font-display text-xl font-bold">{new Date(upcoming.date).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Istanbul"})}</p><span className="mt-2 inline-block rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wider">{upcoming.competition.name}</span></div><div className="flex min-w-0 flex-col items-center gap-3 text-center"><TeamCrest name={upcoming.away.name} logo={upcoming.away.logo} size={104} className="h-24 w-24 sm:h-28 sm:w-28"/><b className="font-display text-lg font-black uppercase sm:text-2xl">{upcoming.away.name}</b></div></div><p className="mt-5 text-center text-sm text-muted-foreground">{new Date(upcoming.date).toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long",timeZone:"Europe/Istanbul"})}{upcoming.venue?" · "+upcoming.venue:""}</p><div className="mx-auto mt-5 flex max-w-md justify-center gap-2">{countdown.map(([v,l])=><div key={l} className="match-countdown"><strong>{String(v).padStart(2,"0")}</strong><small>{l}</small></div>)}</div></>:<EmptyState title="Sıradaki maç bulunamadı" message="Fikstür sağlayıcısı yeni karşılaşma açıkladığında burada görünecek."/>}
+  </section>
+  <section className="surface mt-4 p-5"><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary"><Activity size={20}/></span><div><h2 className="font-display text-xl font-bold uppercase">Canlı istatistikler ve olay akışı</h2><p className="mt-1 text-sm text-muted-foreground">{live?"Karşılaşma başladı. Canlı skor, olay akışı ve istatistikler maç detayında görüntülenir.":"Maç başladığında canlı istatistikler, olay akışı ve maç detayları otomatik olarak açılır."}</p></div></div>{live&&<Link to="/maclar/$matchId" params={{matchId:live.id}} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary">Canlı maçı aç <ArrowRight size={16}/></Link>}</section>
+  {latest&&<section className="surface mt-4 flex flex-wrap items-center justify-between gap-3 p-4"><div className="flex items-center gap-3"><span className="eyebrow">SON MAÇ</span><span className="rounded bg-emerald-500 px-2 py-1 text-xs font-black text-white">G</span><b className="font-display text-lg font-black uppercase">{latest.home.name} {latest.home.score} – {latest.away.score} {latest.away.name}</b><span className="hidden text-xs text-muted-foreground sm:inline">{latest.competition.name} · {new Date(latest.date).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})}</span></div><Link to="/maclar/$matchId" params={{matchId:latest.id}} className="text-sm font-bold text-primary">Ayrıntılar →</Link></section>}
+  <section className="mt-8"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="eyebrow">FİKSTÜR ARŞİVİ</p><h2 className="font-display text-2xl font-black uppercase">Trabzonspor'un son maçları</h2></div><span className="text-xs text-muted-foreground">Son {Math.min(20,recent.length)} karşılaşma</span></div>{recent.length?<div className="space-y-2">{(showAll?recent:recent.slice(0,5)).map(m=><MatchRow key={m.id} match={m}/>)}</div>:<EmptyState title="Oynanmış maç verisi bulunamadı"/>}{recent.length>5&&<button onClick={()=>setShowAll(v=>!v)} className="mt-4 w-full rounded-xl border border-border p-3 text-sm font-bold hover:border-primary">{showAll?"Daha az göster":"Son 20 maçı göster →"}</button>}</section>
+  <SourceBar className="mt-6" envelope={env} queryKey={["schedule"]} live={parts.live.length>0}/>
+ </div>
 }
