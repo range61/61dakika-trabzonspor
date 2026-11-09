@@ -6,6 +6,44 @@ import { mapAthlete, mapEvent, mapStandings, mapSummary } from "./espn.mappers";
 const SITE = "https://site.api.espn.com/apis/site/v2/sports/soccer";
 const V2 = "https://site.api.espn.com/apis/v2/sports/soccer";
 
+const OFFICIAL_TEAM_PAGE = "https://www.trabzonspor.org.tr/tr/mac-merkezi?branch=Football&season=2026%2F2027&team=a-takimi-5";
+
+function decodeHtml(value: string): string {
+  return value.replace(/&amp;/g, "&").replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&uuml;/gi, "ü").replace(/&ouml;/gi, "ö").replace(/&ccedil;/gi, "ç").replace(/&nbsp;/gi, " ");
+}
+
+function normalizePlayerName(value: string): string {
+  return decodeHtml(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("tr")
+    .replace(/ı/g, "i").replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+/** Pulls player-card images from Trabzonspor's own first-team roster page. */
+async function getOfficialPlayerPhotos(): Promise<Map<string, string>> {
+  const html = await fetchText(OFFICIAL_TEAM_PAGE);
+  const photos = new Map<string, string>();
+  const anchors = html.match(/<a\b[^>]*>[\s\S]*?<\/a>/gi) ?? [];
+  for (const anchor of anchors) {
+    const href = anchor.match(/href=["']([^"']*\/branslar\/futbol\/a-takimi-5\/[^"'?#]+)["']/i)?.[1];
+    if (!href) continue;
+    const slug = decodeURIComponent(href.split("/").filter(Boolean).pop() ?? "");
+    const image = anchor.match(/(?:src|data-src)=["']([^"']+\.(?:png|jpe?g|webp)(?:\?[^"']*)?)["']/i)?.[1];
+    if (!image) continue;
+    const absolute = new URL(decodeHtml(image), "https://www.trabzonspor.org.tr").toString();
+    photos.set(normalizePlayerName(slug.replace(/-\d+$/, "").replace(/-/g, " ")), absolute);
+  }
+  return photos;
+}
+
+function officialPhotoFor(name: string, photos: Map<string, string>): string | null {
+  const normalized = normalizePlayerName(name);
+  if (photos.has(normalized)) return photos.get(normalized)!;
+  for (const [slug, url] of photos) {
+    if (slug && (normalized.includes(slug) || slug.includes(normalized))) return url;
+  }
+  return null;
+}
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
@@ -51,11 +89,20 @@ export const espnProvider: FootballProvider = {
   },
 
   async getSquad() {
-    const json = await fetchJson<any>(`${SITE}/tur.1/teams/${CLUB.espnId}/roster`);
+    const [json, officialPhotos] = await Promise.all([
+      fetchJson<any>(`${SITE}/tur.1/teams/${CLUB.espnId}/roster`),
+      getOfficialPlayerPhotos().catch((error) => {
+        console.warn("[squad] Official Trabzonspor player photos unavailable:", error);
+        return new Map<string, string>();
+      }),
+    ]);
     const list: any[] = json?.athletes ?? [];
     // Some payloads group athletes by position: [{ position, items: [...] }]
     const flat = list.flatMap((a) => (Array.isArray(a?.items) ? a.items : [a]));
-    return flat.map(mapAthlete);
+    return flat.map((athlete) => {
+      const player = mapAthlete(athlete);
+      return { ...player, photo: officialPhotoFor(player.name, officialPhotos) ?? player.photo };
+    });
   },
 };
 
