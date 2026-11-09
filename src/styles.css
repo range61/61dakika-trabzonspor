@@ -263,3 +263,13 @@ header.sticky>div{max-width:1160px}header.sticky nav ul{gap:1px}header.sticky na
 @media(max-width:900px){.fan-grid{grid-template-columns:repeat(2,minmax(0,1fr))}header.sticky nav{display:none}.fan-fixture{font-size:21px}}
 @media(max-width:600px){.fan-home{padding-top:14px}.fan-matchbar{align-items:flex-start;flex-direction:column;padding:16px;gap:14px}.fan-countdown{width:100%}.fan-countbox{flex:1;min-width:0}.fan-grid{gap:9px}.fan-tile{min-height:155px;padding:14px;border-radius:15px}.fan-tile h2{font-size:18px}.fan-tile p{font-size:11px}.fan-tile-icon{width:42px;height:42px}.fan-lower{grid-template-columns:1fr;gap:28px;margin-top:36px}.club-hero{padding:18px}.club-hero h2{font-size:29px}}
 @media print{body{background:white!important;color:#111!important}.fan-matchbar,.fan-tile,.surface,.player-card-preview{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+
+/* Homepage: keep the landing screen focused on the next match and the eight tools. */
+body:has(.fan-home) footer.mt-20 { display: none; }
+.fan-home .fan-footer-note { margin-top: 54px; padding-top: 18px; }
+.fan-home .fan-fixture { gap: 9px; }
+.fan-home .fan-fixture img { flex: 0 0 auto; }
+@media (max-width: 600px) {
+  .fan-home .fan-footer-note { margin-top: 30px; }
+}
