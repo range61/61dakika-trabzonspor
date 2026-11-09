@@ -16,4 +16,41 @@ const ZONE:Record<string,StandingRow["zone"]>={"champions league":"cl","champion
 const ZONE_LABEL:Record<NonNullable<StandingRow["zone"]>,string>={cl:"Şampiyonlar Ligi",clq:"Şampiyonlar Ligi elemesi",el:"Avrupa Ligi elemesi",ecl:"Konferans Ligi elemesi",rel:"Küme düşme"};
 export function mapStandings(json:Any):Standings{const child=json?.children?.[0],entries:Any[]=child?.standings?.entries??[],seasonName:string=child?.standings?.seasonDisplayName??json?.seasons?.[0]?.displayName??"",season=seasonName.match(/\d{4}[-/]\d{2,4}/)?.[0]?.replace("/","-")??seasonName;const rows:StandingRow[]=entries.map(e=>{const s:Record<string,number>={};for(const st of e.stats??[])s[st.name]=num(st.value??st.displayValue)??0;const zone=ZONE[(e.note?.description??"").toLowerCase()]??null,t=mapTeam(e.team);return{rank:s.rank||0,team:{id:t.id,name:t.name,shortName:t.shortName,logo:t.logo},played:s.gamesPlayed??0,won:s.wins??0,drawn:s.ties??0,lost:s.losses??0,goalsFor:s.pointsFor??0,goalsAgainst:s.pointsAgainst??0,goalDiff:s.pointDifferential??0,points:s.points??0,note:zone?ZONE_LABEL[zone]:null,zone}});rows.sort((a,b)=>a.rank-b.rank||b.points-a.points);return{competition:competitionFor("tur.1"),season,rows}}
 const POS:Record<string,PositionGroup>={goalkeeper:"GK",defender:"DEF",midfielder:"MID",forward:"FWD"};
-export function mapAthlete(a:Any):Player{const s:Record<string,number>={};for(const cat of a?.statistics?.splits?.categories??[])for(const st of cat.stats??[])s[st.name]=num(st.value)??0;const stats:PlayerStats={appearances:s.appearances??0,subIns:s.subIns??0,goals:s.totalGoals??0,assists:s.goalAssists??0,shots:s.totalShots??0,shotsOnTarget:s.shotsOnTarget??0,yellowCards:s.yellowCards??0,redCards:s.redCards??0,foulsCommitted:s.foulsCommitted??0,foulsSuffered:s.foulsSuffered??0,offsides:s.offsides??0,saves:s.saves??0,goalsConceded:s.goalsConceded??0};const inches=num(a?.height),lbs=num(a?.weight);return{id:String(a.id),name:a.displayName??a.fullName??"—",jersey:a.jersey??null,position:POS[(a?.position?.name??"").toLowerCase()]??"MID",positionDetail:a?.position?.displayName??a?.position?.name??a?.position?.abbreviation??null,age:num(a.age),birthDate:a.dateOfBirth??null,nationality:a.citizenship??null,flag:a.flag?.href??null,heightCm:inches?Math.round(inches*2.54):null,weightKg:lbs?Math.round(lbs*.4536):null,photo:a?.headshot?.href??a?.headshots?.[0]?.href??a?.links?.find((l:Any)=>l.rel?.includes("headshot"))?.href??(a?.id?`https://a.espncdn.com/i/headshots/soccer/players/full/${a.id}.png`:null),profileUrl:a.links?.find((l:Any)=>l.rel?.includes("playercard"))?.href??null,stats}}
+const BEIN_PLAYER_PHOTOS: Record<string, string> = {
+  "andre onana": "https://media02.tr.beinsports.com/img/players/P2946.png",
+  "onuralp cevikkan": "https://media02.tr.beinsports.com/img/players/P108842.png",
+  "ahmet yildirim": "https://media02.tr.beinsports.com/img/players/P124833.png",
+  "stefan savic": "https://media02.tr.beinsports.com/img/players/P13601.png",
+  "mustafa eskihellac": "https://media02.tr.beinsports.com/img/players/P5693.png",
+  "wagner pina": "https://media02.tr.beinsports.com/img/players/P109378.png",
+  "samet akaydin": "https://media02.tr.beinsports.com/img/players/P66219.png",
+  "cenk ozkacar": "https://media02.tr.beinsports.com/img/players/P60976.png",
+  "okay yokuslu": "https://media02.tr.beinsports.com/img/players/P4152.png",
+  "john david lundstram": "https://media02.tr.beinsports.com/img/players/P13644.png",
+  "melih kabasakal": "https://media02.tr.beinsports.com/img/players/P66126.png",
+  "batista mendy": "https://media02.tr.beinsports.com/img/players/P62573.png",
+  "benjamin bouchouari": "https://media02.tr.beinsports.com/img/players/P67160.png",
+  "ozan tufan": "https://media02.tr.beinsports.com/img/players/P24815.png",
+  "ruslan malinovskyi": "https://media02.tr.beinsports.com/img/players/P1437.jpg",
+  "ernest muci": "https://media02.tr.beinsports.com/img/players/P68068.png",
+  "tim jabol-folcarelli": "https://media02.tr.beinsports.com/img/players/P109957.png",
+  "arseniy batagov": "https://media02.tr.beinsports.com/img/players/P52229.png",
+  "mete han mimaroglu": "https://media02.tr.beinsports.com/img/players/P60999.png",
+  "metehan mimaroglu": "https://media02.tr.beinsports.com/img/players/P60999.png",
+  "umut nayir": "https://media02.tr.beinsports.com/img/players/P5441.png",
+  "paul onuachu": "https://media02.tr.beinsports.com/img/players/P31933.png",
+  "ebere paul onuachu": "https://media02.tr.beinsports.com/img/players/P31933.png",
+  "cihan canak": "https://media02.tr.beinsports.com/img/players/P81490.png",
+};
+
+function beinPlayerPhoto(a: Any): string | null {
+  const name = String(a?.displayName ?? a?.fullName ?? "")
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\\s+/g, " ")
+    .trim();
+  return BEIN_PLAYER_PHOTOS[name] ?? null;
+}
+
+export function mapAthlete(a:Any):Player{const s:Record<string,number>={};for(const cat of a?.statistics?.splits?.categories??[])for(const st of cat.stats??[])s[st.name]=num(st.value)??0;const stats:PlayerStats={appearances:s.appearances??0,subIns:s.subIns??0,goals:s.totalGoals??0,assists:s.goalAssists??0,shots:s.totalShots??0,shotsOnTarget:s.shotsOnTarget??0,yellowCards:s.yellowCards??0,redCards:s.redCards??0,foulsCommitted:s.foulsCommitted??0,foulsSuffered:s.foulsSuffered??0,offsides:s.offsides??0,saves:s.saves??0,goalsConceded:s.goalsConceded??0};const inches=num(a?.height),lbs=num(a?.weight);return{id:String(a.id),name:a.displayName??a.fullName??"—",jersey:a.jersey??null,position:POS[(a?.position?.name??"").toLowerCase()]??"MID",positionDetail:a?.position?.displayName??a?.position?.name??a?.position?.abbreviation??null,age:num(a.age),birthDate:a.dateOfBirth??null,nationality:a.citizenship??null,flag:a.flag?.href??null,heightCm:inches?Math.round(inches*2.54):null,weightKg:lbs?Math.round(lbs*.4536):null,photo:beinPlayerPhoto(a)??a?.headshot?.href??a?.headshots?.[0]?.href??a?.links?.find((l:Any)=>l.rel?.includes("headshot"))?.href??(a?.id?`https://a.espncdn.com/i/headshots/soccer/players/full/${a.id}.png`:null),profileUrl:a.links?.find((l:Any)=>l.rel?.includes("playercard"))?.href??null,stats}}
