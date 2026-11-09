@@ -35,6 +35,8 @@ const BEIN_PLAYER_PHOTOS: Record<string, string> = {
   "ernest muci": "https://media02.tr.beinsports.com/img/players/P68068.png",
   "tim jabol-folcarelli": "https://media02.tr.beinsports.com/img/players/P109957.png",
   "arseniy batagov": "https://media02.tr.beinsports.com/img/players/P52229.png",
+  "arsenii batahov": "https://media02.tr.beinsports.com/img/players/P52229.png",
+  "arseniy batahov": "https://media02.tr.beinsports.com/img/players/P52229.png",
   "mete han mimaroglu": "https://media02.tr.beinsports.com/img/players/P60999.png",
   "metehan mimaroglu": "https://media02.tr.beinsports.com/img/players/P60999.png",
   "umut nayir": "https://media02.tr.beinsports.com/img/players/P5441.png",
