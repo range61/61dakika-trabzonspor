@@ -46,7 +46,7 @@ const BEIN_PLAYER_PHOTOS: Record<string, string> = {
   "chibuike godfrey nwaiwu": "https://cdn.trabzonspor.org.tr/trabzonspor_e39b736db70547d7b2a1c4edf74885eb.png",
   "fabinho": "https://cdn.trabzonspor.org.tr/trabzonspor_e359517fc9a041c098dbb209595348f8.png",
   "fabinho tavares": "https://cdn.trabzonspor.org.tr/trabzonspor_e359517fc9a041c098dbb209595348f8.png",
-  "aral sims ir": "https://cdn.trabzonspor.org.tr/trabzonspor_2fd97df984764134ab152a269e663b80.png",
+  "aral simsir": "https://cdn.trabzonspor.org.tr/trabzonspor_2fd97df984764134ab152a269e663b80.png",
   "franculino dju": "https://cdn.trabzonspor.org.tr/trabzonspor_5e223e8896704bab8de831c4eb266e70.png",
   "mohamed salah": "https://cdn.trabzonspor.org.tr/trabzonspor_f53efa55f13344c29ad00d51ba724010.png",
   "noah saviolo": "https://cdn.trabzonspor.org.tr/trabzonspor_da9a6f64b4454cb7b11a46b0d875a996.png",
