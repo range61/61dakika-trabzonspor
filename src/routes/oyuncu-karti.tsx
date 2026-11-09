@@ -5,9 +5,10 @@ import { Container, PageHeader } from "@/components/common/PageHeader";
 import { squadQuery } from "@/lib/data/queries";
 import { seo } from "@/lib/seo";
 import { PlayerAvatar } from "@/components/player/PlayerAvatar";
+import { TRABZONSPOR_CREST } from "@/components/common/TeamCrest";
 
 export const Route=createFileRoute("/oyuncu-karti")({head:()=>seo("Oyuncu kartı oluştur","61Dakika altın futbolcu kartını tasarla ve PNG indir."),loader:({context})=>context.queryClient.ensureQueryData(squadQuery()).then(()=>undefined),component:Page});
-const CREST="https://cdn.trabzonspor.org.tr/ed5615de86e84e4292fedcf65d4b3be4.png";
+const CREST=TRABZONSPOR_CREST;
 const positions=["GK","SLB","STP","SGK","SLK","OS","MO","SĞK","SĞO","SLO","SF","ST","OF"];
 function Page(){
  const {data:env}=useSuspenseQuery(squadQuery()); const players=env.data;
@@ -24,7 +25,7 @@ function Page(){
   c.fillStyle=grad;c.beginPath();c.roundRect(22,22,856,1356,62);c.fill();c.strokeStyle="#fff0b2";c.lineWidth=9;c.stroke();
   c.save();c.beginPath();c.roundRect(42,42,816,1316,48);c.clip();c.globalAlpha=.10;c.strokeStyle="#fff";c.lineWidth=22;for(let x=-900;x<1800;x+=80){c.beginPath();c.moveTo(x,0);c.lineTo(x+700,1400);c.stroke();}c.restore();
   c.fillStyle="#34250b";c.font="900 160px Arial";c.fillText(String(rating),85,225);c.font="bold 58px Arial";c.fillText(position,100,295);c.font="bold 28px Arial";c.fillText(nationality.toLocaleUpperCase("tr-TR"),100,355);
-  c.fillStyle="rgba(255,255,255,.22)";c.beginPath();c.roundRect(310,140,490,510,34);c.fill();
+  c.fillStyle="rgba(255,255,255,.18)";c.beginPath();c.roundRect(310,140,490,510,34);c.fill();
   const load=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.crossOrigin="anonymous";im.onload=()=>resolve(im);im.onerror=reject;im.src=src;});
   if(photo){try{const im=await load(photo);c.save();c.beginPath();c.roundRect(315,145,480,500,28);c.clip();const s=Math.max(480/im.width,500/im.height);c.drawImage(im,315+(480-im.width*s)/2,145+(500-im.height*s)/2,im.width*s,im.height*s);c.restore();}catch{}}
   try{const logo=await load(CREST);c.drawImage(logo,95,385,105,105);}catch{}
@@ -32,7 +33,7 @@ function Page(){
   c.strokeStyle="rgba(60,40,10,.5)";c.lineWidth=3;c.beginPath();c.moveTo(120,800);c.lineTo(780,800);c.stroke();
   const labels=["HIZ","ŞUT","PAS","DRİ","DEF","FİZ"];c.font="900 58px Arial";attrs.forEach((v,i)=>{const x=i%2?570:280,y=900+Math.floor(i/2)*125;c.textAlign="right";c.fillText(String(v),x,y);c.textAlign="left";c.font="bold 34px Arial";c.fillText(labels[i],x+18,y);c.font="900 58px Arial";});
   c.textAlign="center";c.font="bold 26px Arial";c.fillText("61DAKİKA",450,1310);c.fillRect(365,1328,170,6);
-  const a=document.createElement("a");a.download="61dakika-oyuncu-karti.png";a.href=canvas.toDataURL("image/png");a.click();
+  const a=document.createElement("a");a.download="61dakika-oyuncu-karti.png";try{a.href=canvas.toDataURL("image/png");a.click();}catch(error){console.error("Kart PNG dışa aktarılamadı",error);alert("Fotoğraf kaynağı dışa aktarıma izin vermedi. Oyuncu fotoğrafını cihazından yükleyip tekrar deneyebilirsin.");}
  }
  return <Container className="py-7"><PageHeader eyebrow="61Dakika · Tasarım aracı" title="Oyuncu kartı oluştur" description="Oyuncunu seç veya boş kartı kendin doldur. Kartını PNG olarak indir."/>
  <div className="mt-5 grid items-start gap-6 lg:grid-cols-[1fr_382px]">
@@ -46,7 +47,7 @@ function Page(){
  </section>
  <div className="mx-auto w-full max-w-[382px]"><div className="player-card-preview relative aspect-[5/8] overflow-hidden rounded-[28px] border-[5px] border-amber-200/80 p-5 text-[#33250b] shadow-2xl" style={{background:"linear-gradient(135deg,#f8df8c,#d4b35c 52%,#a78336)"}}>
  <div className="absolute inset-0 opacity-20" style={{background:"repeating-linear-gradient(55deg,transparent 0 18px,#fff 19px 29px)"}}/>
- <div className="relative flex h-full flex-col"><div className="flex"><div className="w-[34%]"><strong className="block text-6xl font-black leading-none">{rating}</strong><b className="mt-1 block text-2xl">{position}</b><small className="mt-2 block font-bold">{nationality.toLocaleUpperCase("tr-TR")}</small><img src={CREST} alt="Trabzonspor" className="mt-3 h-12 w-12 object-contain"/></div><div className="flex h-[47%] min-h-[180px] flex-1 items-center justify-center overflow-hidden rounded-2xl bg-white/25">{photo?<img src={photo} alt={name} className="h-full w-full object-contain"/>:<span className="text-6xl font-black text-black/20">61</span>}</div></div>
+ <div className="relative flex h-full flex-col"><div className="flex"><div className="w-[34%]"><strong className="block text-6xl font-black leading-none">{rating}</strong><b className="mt-1 block text-2xl">{position}</b><small className="mt-2 block font-bold">{nationality.toLocaleUpperCase("tr-TR")}</small><img src={CREST} alt="Trabzonspor" className="mt-3 h-14 w-14 object-contain drop-shadow-md"/></div><div className="relative flex h-[47%] min-h-[180px] flex-1 items-center justify-center overflow-hidden rounded-2xl border border-white/30 bg-gradient-to-br from-white/30 to-black/10 shadow-inner">{photo?<img src={photo} alt={name} className="h-full w-full object-cover"/>:<span className="text-6xl font-black text-black/20">61</span>}</div></div>
  <div className="mt-auto text-center"><h3 className="break-words text-3xl font-black uppercase">{name}</h3><div className="my-3 h-px bg-black/40"/><div className="grid grid-cols-2 gap-x-4 gap-y-2 text-left">{["HIZ","ŞUT","PAS","DRİ","DEF","FİZ"].map((l,i)=><div key={l} className="flex items-baseline gap-2"><b className="text-3xl">{attrs[i]}</b><span className="font-bold">{l}</span></div>)}</div><div className="mt-7 text-center text-[10px] font-black tracking-[.35em]">61DAKİKA</div></div></div></div><p className="mt-3 text-center text-xs text-muted-foreground">Kart önizlemesi · PNG olarak indirilebilir</p></div>
  </div></Container>
 }
