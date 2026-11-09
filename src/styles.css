@@ -273,3 +273,20 @@ body:has(.fan-home) footer.mt-20 { display: none; }
 @media (max-width: 600px) {
   .fan-home .fan-footer-note { margin-top: 30px; }
 }
+
+/* Match-centre composition */
+.match-feature{position:relative;background:radial-gradient(ellipse at 50% 0%,rgba(90,43,65,.32),transparent 58%),linear-gradient(115deg,#21141b,#15171e 58%,#111318);border-color:#42303a}
+.match-feature:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;background:repeating-linear-gradient(135deg,transparent 0 26px,rgba(255,255,255,.12) 27px 28px)}
+.match-feature>*{position:relative;z-index:1}
+.match-countdown{display:grid;min-width:68px;padding:9px 10px 7px;border:1px solid rgba(255,255,255,.16);border-radius:11px;background:rgba(5,6,9,.72);text-align:center}
+.match-countdown strong{font-family:var(--font-display);font-size:30px;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.match-countdown small{margin-top:5px;color:#bdb6bf;font-size:9px;letter-spacing:.12em}
+.club-hero{min-height:142px}
+.club-crest{display:flex;width:116px;height:116px;flex:0 0 116px;align-items:center;justify-content:center;border:0;border-radius:0;background:transparent;overflow:visible}
+.club-crest img{width:104px!important;height:104px!important;object-fit:contain}
+.honor-card{position:relative;overflow:hidden;background:radial-gradient(circle at 100% 0%,rgba(132,43,67,.20),transparent 52%),linear-gradient(145deg,#19171b,#111216)}
+.honor-card:after{content:"";position:absolute;right:-28px;bottom:-48px;width:140px;height:140px;border:1px solid rgba(255,255,255,.06);border-radius:50%;box-shadow:0 0 0 18px rgba(255,255,255,.018),0 0 0 38px rgba(255,255,255,.014)}
+.stats-intro{background:radial-gradient(ellipse at 90% 0%,rgba(115,49,72,.25),transparent 48%),linear-gradient(110deg,#21141b,#15171e)}
+.stat-tile{background-image:radial-gradient(circle at 100% 0%,rgba(107,146,188,.10),transparent 60%)}
+.leader-row:last-child{border-bottom:0}
+@media(max-width:600px){.club-crest{width:84px;height:100px;flex-basis:84px}.club-crest img{width:82px!important;height:82px!important}.match-countdown{min-width:0;flex:1;padding-inline:4px}.match-countdown strong{font-size:25px}}
