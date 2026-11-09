@@ -37,7 +37,7 @@ export async function cached<T>(
 
 export async function fetchJson<T = unknown>(url: string, timeoutMs = 10_000): Promise<T> {
   const res = await fetch(url, {
-    headers: { accept: "application/json", "user-agent": "61Dakika/1.0 (taraftar portalı)" },
+    headers: { accept: "application/json", "user-agent": "61Dakika/1.0 (fan portal)" },
     signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw new Error(`Kaynak yanıt vermedi (${res.status})`);
@@ -48,7 +48,7 @@ export async function fetchText(url: string, timeoutMs = 10_000): Promise<string
   const res = await fetch(url, {
     headers: {
       accept: "application/rss+xml, application/xml, text/xml, */*",
-      "user-agent": "61Dakika/1.0 (taraftar portalı)",
+      "user-agent": "61Dakika/1.0 (fan portal)",
     },
     signal: AbortSignal.timeout(timeoutMs),
   });
