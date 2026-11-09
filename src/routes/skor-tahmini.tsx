@@ -42,15 +42,6 @@ function Page() {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1350);
 
-    // Fine diagonal texture, matching the reference poster.
-    ctx.save();
-    ctx.globalAlpha = 0.055;
-    ctx.strokeStyle = "#777";
-    ctx.lineWidth = 18;
-    for (let x = -1400; x < 1800; x += 54) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 760, 1350); ctx.stroke();
-    }
-    ctx.restore();
 
     const loadImage = (url?: string | null) => new Promise<HTMLImageElement | null>(resolve => {
       if (!url) return resolve(null);
@@ -63,19 +54,22 @@ function Page() {
     const [homeLogo, awayLogo] = await Promise.all([
       loadImage(match?.home.logo), loadImage(match?.away.logo)
     ]);
-    const drawCrest = (img: HTMLImageElement | null, x: number, y: number) => {
+    const drawCrest = (img: HTMLImageElement | null, x: number, y: number, removeDarkMatte = false) => {
       if (img) {
         const ratio = Math.min(1, 220 / img.width, 220 / img.height);
         const w = img.width * ratio, h = img.height * ratio;
+        ctx!.save();
+        if (removeDarkMatte) ctx!.globalCompositeOperation = "screen";
         ctx!.drawImage(img, x - w / 2, y - h / 2, w, h);
+        ctx!.restore();
       } else {
         ctx!.fillStyle = "#777"; ctx!.beginPath(); ctx!.arc(x, y, 82, 0, Math.PI * 2); ctx!.fill();
         ctx!.fillStyle = "#fff"; ctx!.font = "bold 44px Arial"; ctx!.textAlign = "center";
         ctx!.fillText((x < 540 ? h : a).slice(0, 3).toLocaleUpperCase("tr"), x, y + 15);
       }
     };
-    drawCrest(homeLogo, 270, 300);
-    drawCrest(awayLogo, 810, 300);
+    drawCrest(homeLogo, 270, 300, /trabzonspor/i.test(h));
+    drawCrest(awayLogo, 810, 300, /trabzonspor/i.test(a));
 
     ctx.textAlign = "center";
     ctx.fillStyle = "#111";
@@ -143,10 +137,9 @@ function Page() {
 
       <div className="surface p-3">
         <div className="relative mx-auto aspect-[4/5] w-full max-w-[540px] overflow-hidden rounded-xl border" style={{ background: "linear-gradient(135deg,#f4f1ed 0 50%,#171719 50% 100%)" }}>
-          <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "repeating-linear-gradient(55deg,transparent 0 22px,#777 23px 30px)" }} />
           <div className="relative grid h-[65%] grid-cols-2 items-center text-center">
-            <div className="flex flex-col items-center px-2 pt-5 text-black"><TeamCrest name={h} logo={match?.home.logo ?? null} size={112}/><b className="mt-5 font-display text-xl font-black uppercase">{h}</b><strong className="mt-5 text-8xl font-black leading-none">{home}</strong></div>
-            <div className="flex flex-col items-center px-2 pt-5 text-white"><TeamCrest name={a} logo={match?.away.logo ?? null} size={112}/><b className="mt-5 font-display text-xl font-black uppercase">{a}</b><strong className="mt-5 text-8xl font-black leading-none">{away}</strong></div>
+            <div className="flex flex-col items-center px-2 pt-5 text-black"><TeamCrest name={h} logo={match?.home.logo ?? null} size={150} className={/trabzonspor/i.test(h) ? "[mix-blend-mode:screen]" : ""}/><b className="mt-5 font-display text-xl font-black uppercase">{h}</b><strong className="mt-5 text-8xl font-black leading-none">{home}</strong></div>
+            <div className="flex flex-col items-center px-2 pt-5 text-white"><TeamCrest name={a} logo={match?.away.logo ?? null} size={150} className={/trabzonspor/i.test(a) ? "[mix-blend-mode:screen]" : ""}/><b className="mt-5 font-display text-xl font-black uppercase">{a}</b><strong className="mt-5 text-8xl font-black leading-none">{away}</strong></div>
           </div>
           <div className="absolute inset-x-0 bottom-0 bg-black/90 px-3 py-7 text-center text-white">
             <p className="font-display text-sm font-bold uppercase sm:text-lg">{competition} · {dateLabel} {timeLabel && "· " + timeLabel}</p>
