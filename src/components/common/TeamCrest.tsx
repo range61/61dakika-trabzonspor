@@ -19,5 +19,5 @@ export function TeamCrest({ name, logo, size = 28, className }: {
   }
   return <img src={src} alt={isTrabzonspor ? "Trabzonspor" : ""} width={size} height={size}
     loading="lazy" onError={() => setFailed(true)} style={{ width: size, height: size }}
-    className={cn("shrink-0 object-contain", className)} />;
+    className={cn("shrink-0 object-contain", className)} style={{ width: size, height: size, transform: isTrabzonspor ? "scale(1.8)" : undefined, transformOrigin: "center" }} />;
 }
