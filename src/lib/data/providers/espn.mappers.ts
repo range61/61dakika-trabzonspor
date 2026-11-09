@@ -46,9 +46,9 @@ const BEIN_PLAYER_PHOTOS: Record<string, string> = {
 function beinPlayerPhoto(a: Any): string | null {
   const name = String(a?.displayName ?? a?.fullName ?? "")
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
   return BEIN_PLAYER_PHOTOS[name] ?? null;
 }
