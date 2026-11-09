@@ -2,8 +2,8 @@ import { useState } from "react";
 import { initials } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
-// Official current full-colour Trabzonspor crest from the club's corporate identity page.
-const TRABZONSPOR_CREST = "https://cdn.trabzonspor.org.tr/ed5615de86e84e4292fedcf65d4b3be4.png";
+// Current transparent crest (SVG) rather than a boxed raster badge.
+const TRABZONSPOR_CREST = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Trabzonspor_logosu.svg";
 
 export function TeamCrest({ name, logo, size = 28, className }: {
   name: string; logo: string | null; size?: number; className?: string;
@@ -17,7 +17,9 @@ export function TeamCrest({ name, logo, size = 28, className }: {
       {initials(name)}
     </span>;
   }
-  return <img src={src} alt={isTrabzonspor ? "Trabzonspor" : ""} width={size} height={size}
-    loading="lazy" onError={() => setFailed(true)}
-    className={cn("shrink-0 object-contain", className)} style={{ width: size, height: size, transform: isTrabzonspor ? "scale(1.8)" : undefined, transformOrigin: "center" }} />;
+  return <span className={cn("inline-flex shrink-0 items-center justify-center bg-transparent", className)} style={{width:size,height:size}}>
+    <img src={src} alt={isTrabzonspor ? "Trabzonspor" : name} width={size} height={size}
+      loading="lazy" onError={() => setFailed(true)}
+      className="block h-full w-full bg-transparent object-contain" />
+  </span>;
 }
