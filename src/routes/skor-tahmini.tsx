@@ -6,6 +6,7 @@ import { TeamCrest } from "@/components/common/TeamCrest";
 import { scheduleQuery } from "@/lib/data/queries";
 import { seo } from "@/lib/seo";
 import { formatDateTimeShort } from "@/lib/format";
+import { CLUB } from "@/lib/data/config";
 
 export const Route = createFileRoute("/skor-tahmini")({
   head: () => seo("Skor tahmini", "Trabzonspor maç günü skor tahminini oluştur."),
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/skor-tahmini")({
 function Page() {
   const { data: env } = useSuspenseQuery(scheduleQuery());
   const matches = env.data.filter(m => m.state === "pre");
-  const defaultMatch = matches.find(m => m.home.id === "994" || m.away.id === "994") ?? matches[0];
+  const defaultMatch = matches.find(m => m.home.id === CLUB.espnId || m.away.id === CLUB.espnId) ?? matches[0];
   const [id, setId] = useState("");
   const match = matches.find(m => m.id === id) ?? defaultMatch;
   const [home, setHome] = useState(0);
