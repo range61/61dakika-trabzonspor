@@ -20,16 +20,13 @@ function normalizePlayerName(value: string): string {
 }
 
 function imageFromOfficialProfile(html: string): string | null {
-  const candidates = [
-    html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)?.[1],
-    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)?.[1],
-    html.match(/https?:\\?\\?\/\\?\\?\/cdn\\.trabzonspor\\.org\\.tr\\/[^"'\\s<>]+?\\.(?:png|jpe?g|webp)/i)?.[0],
-    html.match(/(?:src|data-src)=["']([^"']*cdn\\.trabzonspor\\.org\\.tr[^"']+\\.(?:png|jpe?g|webp)[^"']*)["']/i)?.[1],
-  ].filter(Boolean) as string[];
-  const value = candidates[0];
+  const og = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)?.[1]
+    ?? html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)?.[1];
+  const cdn = html.match(/https?:\\/\\/cdn\\.trabzonspor\\.org\\.tr\\/[^"'\\s<>]+?\\.(?:png|jpe?g|webp)/i)?.[0];
+  const src = html.match(/(?:src|data-src)=["']([^"']*cdn\\.trabzonspor\\.org\\.tr[^"']+\\.(?:png|jpe?g|webp)[^"']*)["']/i)?.[1];
+  const value = og || src || cdn;
   if (!value) return null;
-  const decoded = decodeHtml(value.replace(/\\\\\\//g, "/").replace(/\\\\u0026/g, "&"));
-  try { return new URL(decoded, "https://www.trabzonspor.org.tr").toString(); }
+  try { return new URL(decodeHtml(value.replace(/\\\\\\//g, "/")), "https://www.trabzonspor.org.tr").toString(); }
   catch { return null; }
 }
 
