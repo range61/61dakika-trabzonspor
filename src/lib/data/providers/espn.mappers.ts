@@ -43,6 +43,21 @@ const BEIN_PLAYER_PHOTOS: Record<string, string> = {
   "paul onuachu": "https://media02.tr.beinsports.com/img/players/P31933.png",
   "ebere paul onuachu": "https://media02.tr.beinsports.com/img/players/P31933.png",
   "cihan canak": "https://media02.tr.beinsports.com/img/players/P81490.png",
+  "sidny lopes cabral": "https://foto.haberler.com/haber/2026/06/04/trabzonspor-cabral-transferini-acikladi_e546f079c1_o.jpg",
+  "chibuike nwaiwu": "https://cdn.trabzonspor.org.tr/trabzonspor_e39b736db70547d7b2a1c4edf74885eb.png",
+  "chibuike godfrey nwaiwu": "https://cdn.trabzonspor.org.tr/trabzonspor_e39b736db70547d7b2a1c4edf74885eb.png",
+  "fabinho": "https://img.youm7.com/ArticleImgs/2026/8/24/206252-%D9%81%D8%A7%D8%A8%D9%8A%D9%86%D9%8A%D9%88.jpg",
+  "fabinho tavares": "https://img.youm7.com/ArticleImgs/2026/8/24/206252-%D9%81%D8%A7%D8%A8%D9%8A%D9%86%D9%8A%D9%88.jpg",
+  "aral simsır": "https://itkv.tmgrup.com.tr/2026/07/06/aral-simsir-trabzonsporda-iste-turkiyeye-gelis-tarihi-1783346737873.jpg",
+  "aral simsır": "https://itkv.tmgrup.com.tr/2026/07/06/aral-simsir-trabzonsporda-iste-turkiyeye-gelis-tarihi-1783346737873.jpg",
+  "aral simsır": "https://itkv.tmgrup.com.tr/2026/07/06/aral-simsir-trabzonsporda-iste-turkiyeye-gelis-tarihi-1783346737873.jpg",
+  "aral simsir": "https://itkv.tmgrup.com.tr/2026/07/06/aral-simsir-trabzonsporda-iste-turkiyeye-gelis-tarihi-1783346737873.jpg",
+  "mohamed salah": "https://i.12punto.com.tr/Archive/2026/8/5/147544/kapak_firtinadan-tarihi-transfer-mohamed-salahin-trabzonspora-yillik-maliyeti-belli-oldu-124073.jpg",
+  "franculino dju": "https://www.ceroacero.es/img/jogadores/new/81/55/788155_franculino_dju_20250925124140.png",
+  "noah saviolo": "https://foto.haberler.com/haber/2026/06/09/trabzonspor-un-205-yabancisi-noah-saviolo-19927413_amp.jpg",
+  "ali habesoglu": "https://iaysr.tmgrup.com.tr/c12d4a/1200/675/2/0/997/560?u=https%3A%2F%2Fiysr.tmgrup.com.tr%2F2026%2F09%2F05%2Fbordo-mavililer-aliyi-transfer-etti-1788557217455.png",
+  "melih kabasakal": "https://resim.haber61.net/medya/2026/07/melih-kabasakal-transferinde-fatih-tekke-detayi-106a460f89bde5d.webp",
+  "ruslan malinovskyi": "https://bookmakers.com.ua/img/news/thumbs/malinovskyitrabzonspor.jpg",
 };
 
 function beinPlayerPhoto(a: Any): string | null {
