@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { initials } from "@/lib/format";
 import { cn } from "@/lib/utils";
-export const TRABZONSPOR_CREST = "https://a.espncdn.com/i/teamlogos/soccer/500/997.png";
+
+// Official current club crest (gold star) from Trabzonspor's corporate identity assets.
+export const TRABZONSPOR_CREST = "https://cdn.trabzonspor.org.tr/trabzonspor_79c9c8789a8a46aaac52cefe2fcd5c9d.png";
+
 export function TeamCrest({ name, logo, size = 28, className }: { name: string; logo: string | null; size?: number; className?: string }) {
   const [failed, setFailed] = useState(false);
   const isTrabzonspor = /trabzonspor/i.test(name);
