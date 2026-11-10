@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { loadMatch, loadNews, loadSchedule, loadSquad, loadStandings } from "./registry.server";
+import { loadMatch, loadNews, loadSchedule, loadSquad, loadStandings, loadConferenceStandings } from "./registry.server";
 
 const refresh = z.object({ force: z.boolean().optional() }).optional();
 
