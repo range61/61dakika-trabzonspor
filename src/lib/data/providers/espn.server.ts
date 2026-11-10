@@ -69,6 +69,6 @@ export const espnCached = {
   schedule: (force?: boolean) => cached("espn:schedule", 60_000, () => espnProvider.getSchedule(), { force }),
   match: (id: string, live: boolean, force?: boolean) =>
     cached(`espn:match:${id}`, live ? 15_000 : 120_000, () => espnProvider.getMatch(id), { force }),
-  standings: (force?: boolean) => cached("espn:standings", 5 * 60_000, () => espnProvider.getStandings(), { force }),
+  standings: (force?: boolean) => cached("espn:standings", 5 * 60_000, () => espnProvider.getStandings(), { force }),\n  conferenceStandings: (force?: boolean) => cached("espn:standings:conference", 5 * 60_000, () => espnProvider.getConferenceStandings(), { force }),
   squad: (force?: boolean) => cached("espn:squad", 30 * 60_000, () => espnProvider.getSquad(), { force }),
 };
