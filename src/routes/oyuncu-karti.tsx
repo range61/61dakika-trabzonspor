@@ -28,7 +28,7 @@ function Page(){
   c.fillStyle="rgba(255,255,255,.18)";c.beginPath();c.roundRect(310,140,490,510,34);c.fill();
   const load=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.crossOrigin="anonymous";im.onload=()=>resolve(im);im.onerror=reject;im.src=src;});
   if(photo){try{const im=await load(photo);c.save();c.beginPath();c.roundRect(315,145,480,500,28);c.clip();const s=Math.max(480/im.width,500/im.height);c.drawImage(im,315+(480-im.width*s)/2,145+(500-im.height*s)/2,im.width*s,im.height*s);c.restore();}catch{}}
-  try{const logo=await load(CREST);c.drawImage(logo,95,385,105,105);}catch{}
+  try{const logo=await load(CREST);const max=125;const scale=Math.min(max/logo.width,max/logo.height);const w=logo.width*scale;const h=logo.height*scale;c.drawImage(logo,150-w/2,438-h/2,w,h);}catch{}
   c.textAlign="center";c.fillStyle="#2b210e";c.font="900 78px Arial";c.fillText(name.toLocaleUpperCase("tr-TR"),450,760,760);
   c.strokeStyle="rgba(60,40,10,.5)";c.lineWidth=3;c.beginPath();c.moveTo(120,800);c.lineTo(780,800);c.stroke();
   const labels=["HIZ","ŞUT","PAS","DRİ","DEF","FİZ"];c.font="900 58px Arial";attrs.forEach((v,i)=>{const x=i%2?570:280,y=900+Math.floor(i/2)*125;c.textAlign="right";c.fillText(String(v),x,y);c.textAlign="left";c.font="bold 34px Arial";c.fillText(labels[i],x+18,y);c.font="900 58px Arial";});
