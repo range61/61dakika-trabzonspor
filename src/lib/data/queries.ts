@@ -1,6 +1,6 @@
 import { queryOptions, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import { getMatchFn, getNewsFn, getScheduleFn, getSquadFn, getStandingsFn } from "./football.functions";
+import { getMatchFn, getNewsFn, getScheduleFn, getSquadFn, getStandingsFn, getConferenceStandingsFn } from "./football.functions";
 import type { DataEnvelope } from "./types";
 
 export const scheduleQuery = () =>
@@ -21,7 +21,7 @@ export const matchQuery = (id: string) =>
 export const standingsQuery = () =>
   queryOptions({ queryKey: ["standings"], queryFn: () => getStandingsFn({ data: {} }), staleTime: 5 * 60_000 });
 
-export const squadQuery = () =>
+export const conferenceStandingsQuery = () =>\n  queryOptions({ queryKey: ["standings", "conference"], queryFn: () => getConferenceStandingsFn({ data: {} }), staleTime: 5 * 60_000 });\n\nexport const squadQuery = () =>
   queryOptions({ queryKey: ["squad"], queryFn: () => getSquadFn({ data: {} }), staleTime: 30 * 60_000 });
 
 export const newsQuery = () =>
@@ -29,7 +29,7 @@ export const newsQuery = () =>
 
 const FORCE: Record<string, (id?: string) => Promise<DataEnvelope<unknown>>> = {
   schedule: () => getScheduleFn({ data: { force: true } }),
-  standings: () => getStandingsFn({ data: { force: true } }),
+  standings: () => getStandingsFn({ data: { force: true } }),\n  "standings:conference": () => getConferenceStandingsFn({ data: { force: true } }),
   squad: () => getSquadFn({ data: { force: true } }),
   news: () => getNewsFn({ data: { force: true } }),
   match: (id) => getMatchFn({ data: { id: id!, force: true } }),
