@@ -1,4 +1,5 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";\nimport { useState } from "react";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Container, PageHeader } from "@/components/common/PageHeader";
 import { ListSkeleton, RouteError, Section } from "@/components/common/States";
