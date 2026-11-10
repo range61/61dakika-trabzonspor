@@ -41,6 +41,11 @@ export async function loadStandings(force?: boolean): Promise<DataEnvelope<Stand
   return wrap(espnProvider.info, await espnCached.standings(force));
 }
 
+export async function loadConferenceStandings(force?: boolean): Promise<DataEnvelope<Standings>> {
+  if (footballMode() === "demo") return wrap(demoFootballProvider.info, await demo(demoFootballProvider.getStandings));
+  return wrap(espnProvider.info, await espnCached.conferenceStandings(force));
+}
+
 export async function loadSquad(force?: boolean): Promise<DataEnvelope<Player[]>> {
   if (footballMode() === "demo") return wrap(demoFootballProvider.info, await demo(demoFootballProvider.getSquad));
   return wrap(espnProvider.info, await espnCached.squad(force));
