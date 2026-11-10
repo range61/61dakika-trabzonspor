@@ -18,6 +18,10 @@ export const getStandingsFn = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => refresh.parse(d))
   .handler(({ data }) => loadStandings(data?.force));
 
+export const getConferenceStandingsFn = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => refresh.parse(d))
+  .handler(({ data }) => loadConferenceStandings(data?.force));
+
 export const getSquadFn = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => refresh.parse(d))
   .handler(({ data }) => loadSquad(data?.force));
