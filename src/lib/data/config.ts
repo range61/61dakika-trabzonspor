@@ -75,10 +75,12 @@ export const NEWS_CATEGORIES: Record<NewsCategory, string> = {
   gundem: "Gündem",
 };
 
-/** Public publisher RSS feeds used for headlines. `filter` = keep only Trabzonspor items. */
+/** Public RSS feeds. All headlines pass a strict Trabzonspor relevance check. */
 export const NEWS_FEEDS = [
-  { name: "Fotomaç", home: "https://www.fotomac.com.tr", url: "https://www.fotomac.com.tr/rss/trabzonspor.xml", filter: false },
-  { name: "A Spor", home: "https://www.aspor.com.tr", url: "https://www.aspor.com.tr/rss/trabzonspor.xml", filter: false },
+  { name: "61saat", home: "https://www.61saat.com", url: "https://www.61saat.com/rss", filter: true },
+  { name: "A Haber", home: "https://www.ahaber.com.tr", url: "https://www.ahaber.com.tr/rss/trabzonspor.xml", filter: true },
+  { name: "Fotomaç", home: "https://www.fotomac.com.tr", url: "https://www.fotomac.com.tr/rss/trabzonspor.xml", filter: true },
+  { name: "A Spor", home: "https://www.aspor.com.tr", url: "https://www.aspor.com.tr/rss/trabzonspor.xml", filter: true },
   { name: "TRT Haber", home: "https://www.trthaber.com", url: "https://www.trthaber.com/spor_articles.rss", filter: true },
   { name: "Hürriyet", home: "https://www.hurriyet.com.tr", url: "https://www.hurriyet.com.tr/rss/spor", filter: true },
 ] as const;
