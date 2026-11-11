@@ -42,7 +42,7 @@ function NewsDetail() {
       </Link>
       <article className="mx-auto mt-6 max-w-2xl">
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <Badge variant="sky">{NEWS_CATEGORIES[item.category]}</Badge>
+          <Badge variant="soft">{NEWS_CATEGORIES[item.category]}</Badge>
           <span>{item.source.name}</span>
           <span aria-hidden>·</span>
           <time dateTime={item.publishedAt ?? undefined}>{formatDateYear(item.publishedAt)} · {formatDateTimeShort(item.publishedAt).split(" ").pop()}</time>
