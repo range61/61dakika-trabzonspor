@@ -50,13 +50,9 @@ function NewsDetail() {
         <h1 className="mt-4 text-2xl font-semibold leading-tight text-foreground sm:text-3xl">{item.title}</h1>
         {item.excerpt && <p className="mt-4 text-base leading-relaxed text-foreground/80">{item.excerpt}</p>}
 
-        <div className="surface mt-6 p-4">
-          <p className="text-sm font-semibold">Haber hakkında</p>
-          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Bu haberin yayıncı tarafından paylaşılan RSS açıklaması yukarıda gösteriliyor. Kaynak akışında tam haber metni bulunmadığı için devamını uydurarak eklemiyoruz. 61Dakika'da yalnızca doğrulanabilir kaynak bilgilerini paylaşıyoruz.
-          </p>
-          <p className="mt-3 text-xs text-muted-foreground">Haber kaynağı: {item.source.name}</p>
-        </div>
+        <p className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
+          Kaynak: {item.source.name}
+        </p>
       </article>
 
       {related.length > 0 && (
