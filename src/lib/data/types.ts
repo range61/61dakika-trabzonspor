@@ -137,7 +137,9 @@ export type NewsCategory = "mac" | "transfer" | "sakatlik" | "avrupa" | "kulup" 
 export interface NewsItem {
   id: string;
   title: string;
-  /** Short excerpt (truncated) — never full article text */
+  /** Publisher-supplied full body, only when explicitly included in RSS content fields. */
+  articleContent?: string | null;
+  /** Publisher-provided summary/excerpt. */
   excerpt: string;
   url: string;
   source: { name: string; url: string };
