@@ -51,11 +51,11 @@ function NewsDetail() {
         {item.excerpt && <p className="mt-4 text-base leading-relaxed text-foreground/80">{item.excerpt}</p>}
 
         <div className="surface mt-6 p-4">
-          <p className="text-sm font-semibold">61Dakika haber özeti</p>
+          <p className="text-sm font-semibold">Haber hakkında</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Bu içerik, {item.source.name} tarafından herkese açık haber akışında paylaşılan başlık ve kısa açıklamadan derlenmiştir. Kaynakta bulunmayan ayrıntılar eklenmemiştir.
+            Bu haberin yayıncı tarafından paylaşılan RSS açıklaması yukarıda gösteriliyor. Kaynak akışında tam haber metni bulunmadığı için devamını uydurarak eklemiyoruz. 61Dakika'da yalnızca doğrulanabilir kaynak bilgilerini paylaşıyoruz.
           </p>
-          <p className="mt-3 text-xs text-muted-foreground">Kaynak: {item.source.name} · İçerik 61Dakika içinde görüntüleniyor.</p>
+          <p className="mt-3 text-xs text-muted-foreground">Haber kaynağı: {item.source.name}</p>
         </div>
       </article>
 
