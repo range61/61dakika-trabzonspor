@@ -26,13 +26,22 @@ const toolItems:{id:Tool;label:string;symbol:string}[]=[{id:"select",label:"Seç
 function Page(){
  const {data:env}=useSuspenseQuery(squadQuery());const players=env.data;
  const [shape,setShape]=useState("4-2-3-1");const [placed,setPlaced]=useState<(Player|null)[]>(Array(11).fill(null));const [points,setPoints]=useState<Point[]>(formations["4-2-3-1"]);
- const [tool,setTool]=useState<Tool>("select");const [selectedPlayer,setSelectedPlayer]=useState<Player|null>(null);const [search,setSearch]=useState("");const [opponents,setOpponents]=useState<Token[]>([]);const [balls,setBalls]=useState<Token[]>([]);const [arrows,setArrows]=useState<Arrow[]>([]);const [drawStart,setDrawStart]=useState<Point|null>(null);const [dragging,setDragging]=useState<number|null>(null);
+ const [tool,setTool]=useState<Tool>("select");const [selectedPlayer,setSelectedPlayer]=useState<Player|null>(null);const [rosterMessage,setRosterMessage]=useState("");const [search,setSearch]=useState("");const [opponents,setOpponents]=useState<Token[]>([]);const [balls,setBalls]=useState<Token[]>([]);const [arrows,setArrows]=useState<Arrow[]>([]);const [drawStart,setDrawStart]=useState<Point|null>(null);const [dragging,setDragging]=useState<number|null>(null);
  const [playing,setPlaying]=useState(false);const [visibleArrowCount,setVisibleArrowCount]=useState(0);const [title,setTitle]=useState("Trabzonspor taktik planı");const [opponentName,setOpponentName]=useState("Rakip takım");const [color,setColor]=useState("#ffffff");const pitchRef=useRef<HTMLDivElement>(null);
  const filtered=useMemo(()=>players.filter(p=>p.name.toLocaleLowerCase("tr").includes(search.toLocaleLowerCase("tr"))),[players,search]);
- useEffect(()=>{if(selectedPlayer){window.setTimeout(()=>pitchRef.current?.scrollIntoView({behavior:"smooth",block:"center"}),80)}},[selectedPlayer]);
  useEffect(()=>{if(!playing)return;const timer=window.setInterval(()=>setVisibleArrowCount(v=>{if(v>=arrows.length){setPlaying(false);return arrows.length;}return v+1}),650);return()=>window.clearInterval(timer)},[playing,arrows.length]);
  function pointAt(e:{clientX:number;clientY:number}):Point{const r=pitchRef.current!.getBoundingClientRect();return{x:Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100)),y:Math.max(3,Math.min(97,(e.clientY-r.top)/r.height*100))}}
- function addPlayer(p:Player){setSelectedPlayer(p);setTool("player")}
+ function addPlayer(p:Player){
+  const existing=placed.findIndex(v=>v?.id===p.id);
+  if(existing>=0){setRosterMessage(p.name+" zaten sahada. Seç / taşı aracıyla konumunu değiştirebilirsin.");setTool("select");setSelectedPlayer(null);return}
+  const idx=placed.findIndex(v=>!v);
+  if(idx<0){setRosterMessage("İlk 11 dolu. Yeni oyuncu eklemek için önce sahadaki bir oyuncuyu çıkar veya temizle.");return}
+  setPlaced(a=>a.map((v,i)=>i===idx?p:v));
+  setRosterMessage(p.name+" ilk 11'e eklendi.");
+  setSelectedPlayer(null);
+  setTool("select");
+  window.setTimeout(()=>pitchRef.current?.scrollIntoView({behavior:"smooth",block:"center"}),60);
+ }
  function placePlayer(pt:Point){if(!selectedPlayer)return;const old=placed.findIndex(p=>p?.id===selectedPlayer.id);const idx=old>=0?old:placed.findIndex(p=>!p);const target=idx<0?10:idx;setPlaced(a=>a.map((p,i)=>i===target?selectedPlayer:p));setPoints(a=>a.map((p,i)=>i===target?pt:p));setSelectedPlayer(null);setTool("select")}
  function handlePitchClick(e:React.MouseEvent<HTMLDivElement>){if((e.target as HTMLElement).closest("[data-token]"))return;const pt=pointAt(e);if(tool==="player"&&selectedPlayer){placePlayer(pt);return}if(tool==="opponent"){setOpponents(a=>[...a,{id:Date.now(),...pt}]);return}if(tool==="ball"){setBalls(a=>[...a,{id:Date.now(),...pt}]);return}}
  function handlePointerDown(e:React.PointerEvent<HTMLDivElement>){if(["run","pass","shot"].includes(tool)){const pt=pointAt(e);setDrawStart(pt);e.currentTarget.setPointerCapture(e.pointerId)}}
@@ -118,8 +127,8 @@ function Page(){
      <section className="rounded-xl border border-white/10 bg-[#1b1e21] p-3">
       <div className="mb-2 flex items-center justify-between"><h2 className="font-display text-lg font-bold text-white">KADRO</h2><span className="text-[10px] text-white/45">{players.length} OYUNCU</span></div>
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Oyuncu ara..." className="mb-2 w-full rounded-lg border border-white/10 bg-[#101214] p-2 text-sm text-white placeholder:text-white/35"/>
-      <div className="max-h-[440px] space-y-1 overflow-y-auto">{filtered.map(p=><button key={p.id} onClick={()=>addPlayer(p)} className={`flex w-full items-center gap-2 rounded-lg border p-2 text-left ${selectedPlayer?.id===p.id?"border-amber-300 bg-amber-300/10":"border-white/5 bg-[#15181a]"}`}><PlayerAvatar name={p.name} jersey={p.jersey} photo={p.photo} size={36}/><span className="min-w-0 flex-1 truncate text-xs font-semibold text-white">{p.name}</span><small className="text-xs text-white/55">#{p.jersey??"—"}</small></button>)}</div>
-      <p className="mt-2 text-[11px] text-white/45">Oyuncuya dokun, ardından sahada istediğin noktaya dokunarak yerleştir.</p>
+      <div className="max-h-[440px] space-y-1 overflow-y-auto">{filtered.map(p=><button key={p.id} onClick={()=>addPlayer(p)} className={`flex w-full items-center gap-2 rounded-lg border p-2 text-left ${placed.some(v=>v?.id===p.id)?"border-emerald-500/50 bg-emerald-500/10":"border-white/5 bg-[#15181a]"}`}><PlayerAvatar name={p.name} jersey={p.jersey} photo={p.photo} size={36}/><span className="min-w-0 flex-1 truncate text-xs font-semibold text-white">{p.name}</span><small className="text-xs text-white/55">#{p.jersey??"—"}</small></button>)}</div>
+      <p className="mt-2 text-[11px] text-white/45">Oyuncuya dokunduğunda ilk 11’deki sıradaki boş pozisyona otomatik eklenir. Sonrasında sahada sürükleyerek yerini değiştirebilirsin.</p>{rosterMessage&&<p role="status" className="mt-2 rounded-lg bg-emerald-500/10 px-2 py-2 text-xs text-emerald-300">{rosterMessage}</p>}
      </section>
      <section className="rounded-xl border border-white/10 bg-[#1b1e21] p-3"><h2 className="font-display text-sm font-bold text-white">ÇİZİM KILAVUZU</h2><div className="mt-2 space-y-2 text-xs text-white/65"><p><span className="mr-2 inline-block w-7 border-t-2 border-dashed border-amber-300 align-middle"/>Koşu yolu</p><p><span className="mr-2 inline-block w-7 border-t-2 border-white align-middle"/>Pas yolu</p><p><span className="mr-2 inline-block w-7 border-t-2 border-red-500 align-middle"/>Şut yolu</p></div></section>
     </aside>
