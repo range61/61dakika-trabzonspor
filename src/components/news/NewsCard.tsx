@@ -8,7 +8,7 @@ export function NewsCard({ item, compact = false }: { item: NewsItem; compact?: 
   return (
     <article className="surface surface-interactive group relative flex h-full flex-col p-4 sm:p-5">
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Badge variant="sky">{NEWS_CATEGORIES[item.category]}</Badge>
+        <Badge variant="soft">{NEWS_CATEGORIES[item.category]}</Badge>
         <span className="truncate">{item.source.name}</span>
         <span aria-hidden>·</span>
         <time className="shrink-0 tabular" dateTime={item.publishedAt ?? undefined}>
