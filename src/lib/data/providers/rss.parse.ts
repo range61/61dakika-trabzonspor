@@ -87,12 +87,16 @@ export function parseRss(
       .trim();
     if (opts.filter && !opts.filter.test(lower(title))) continue;
     if (opts.exclude?.test(lower(title)) && !opts.allowExcluded?.test(lower(title))) continue;
+    // Full article text is used only when the publisher explicitly includes it in RSS.
+    const encodedBody = tag(raw, "content:encoded") || tag(raw, "content");
+    const articleContent = encodedBody ? clean(encodedBody) : null;
     const pub = clean(tag(raw, "pubDate"));
     const d = pub ? new Date(pub) : null;
     out.push({
       id: hashId(link),
       title,
       excerpt: excerpt(desc && lower(desc) !== lower(title) ? desc : ""),
+      articleContent: articleContent && articleContent.length > 120 ? articleContent : null,
       url: link,
       source: { name: source.name, url: source.home },
       publishedAt: d && !Number.isNaN(d.getTime()) ? d.toISOString() : null,
