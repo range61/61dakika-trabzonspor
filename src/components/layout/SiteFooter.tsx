@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Instagram } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { MAIN_NAV, TOOLS_NAV } from "./nav";
 
@@ -16,6 +17,9 @@ export function SiteFooter() {
             Maç ve istatistik verileri herkese açık spor veri kaynaklarından, haber başlıkları yayıncıların RSS
             akışlarından alınır ve her zaman kaynağına bağlantı verilir.
           </p>
+          <a href="https://www.instagram.com/61dakika/" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-lg border border-[#713047] bg-[#32151f] px-3 py-2 text-sm font-semibold text-[#f0a0b7] transition-colors hover:bg-[#492033]">
+            <Instagram className="h-4 w-4" /> Instagram · @61dakika
+          </a>
         </div>
         <FooterCol title="Bölümler" items={MAIN_NAV} />
         <FooterCol title="Araçlar" items={TOOLS_NAV} />
