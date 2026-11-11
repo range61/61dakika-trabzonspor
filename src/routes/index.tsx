@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, BarChart3, CalendarDays, ChartNoAxesCombined, ClipboardList, Flag, GitCompareArrows, IdCard, SlidersHorizontal, Target, Trophy } from "lucide-react";
+import { ArrowUpRight, ChartNoAxesCombined, ClipboardList, Flag, GitCompareArrows, IdCard, Instagram, SlidersHorizontal, Target, Trophy } from "lucide-react";
 import { Container } from "@/components/common/PageHeader";
 import { scheduleQuery } from "@/lib/data/queries";
 import { nextMatch } from "@/lib/data/derive";
@@ -32,5 +32,19 @@ return <main className="fan-home"><Container className="fan-container">
 {match?<div className="fan-countdown">{[[days,"GÜN"],[hours,"SAAT"],[mins,"DAKİKA"],[secs,"SANİYE"]].map(([v,l])=><div className="fan-countbox" key={l}><strong>{String(v).padStart(2,"0")}</strong><small>{l}</small></div>)}</div>:<div className="fan-countdown"><div className="fan-countbox"><strong>61</strong><small>DAKİKA</small></div></div>}
 </div>
 <section className="fan-grid">{tiles.map(t=><Link to={t.to} className="fan-tile" key={t.to}><span className="fan-tile-icon"><t.icon size={25}/></span><span className="fan-arrow"><ArrowUpRight size={17}/></span><div><h2>{t.title}</h2><p>{t.desc}</p></div></Link>)}</section>
+<section className="fan-instagram" aria-labelledby="fan-instagram-title">
+  <div className="fan-instagram-copy">
+    <span className="fan-instagram-kicker"><Instagram size={15}/> 61DAKİKA INSTAGRAM</span>
+    <h2 id="fan-instagram-title">Tribün ruhu, şimdi Instagram’da.</h2>
+    <p>Trabzonspor’dan maç günü paylaşımları, transfer gündemi ve bordo-mavili içerikler için bizi takip et.</p>
+    <a className="fan-instagram-cta" href="https://www.instagram.com/61dakika/" target="_blank" rel="noopener noreferrer">
+      <Instagram size={18}/> @61dakika’yı takip et <ArrowUpRight size={17}/>
+    </a>
+  </div>
+  <div className="fan-instagram-art" aria-hidden="true">
+    <div className="fan-instagram-mark"><span>61</span><small>DAKİKA</small></div>
+    <div className="fan-instagram-tags"><span>MAÇ GÜNÜ</span><span>TRANSFER</span><span>TRABZONSPOR</span></div>
+  </div>
+</section>
 <div className="fan-footer-note">Resmî olmayan taraftar sitesidir. Maç ve istatistik verileri herkese açık spor veri kaynaklarından otomatik çekilir.</div>
 </Container></main>}
