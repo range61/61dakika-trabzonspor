@@ -14,7 +14,7 @@ export function SiteHeader() {
         <Link to="/" className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <Wordmark />
         </Link>
-        <Link to="/" activeOptions={{ exact: true }} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#7a1f3d]/20 bg-[#7a1f3d]/[0.06] px-2.5 py-2 text-xs font-semibold text-[#7a1f3d] transition-colors hover:bg-[#7a1f3d]/10 sm:px-3" aria-label="Ana sayfaya git">
+        <Link to="/" activeOptions={{ exact: true }} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#b84d70] bg-[#8f3152] px-2.5 py-2 text-xs font-bold text-white shadow-[0_2px_10px_rgba(143,49,82,0.3)] transition-colors hover:bg-[#a63d62] sm:px-3" aria-label="Ana sayfaya git">
           <Home className="h-4 w-4" />
           <span className="hidden sm:inline">Ana Sayfa</span>
         </Link>
