@@ -3,7 +3,9 @@ import { cached, fetchText } from "../cache.server";
 import type { NewsProvider } from "../types";
 import { mergeNews, parseRss } from "./rss.parse";
 
-const TS_FILTER = /trabzon|bordo-mavi|bordo mavi|fırtına/;
+const TS_FILTER = /trabzonspor|bordo-mavi|bordo mavi/i;
+const OTHER_CLUB_FILTER = /galatasaray|fenerbahçe|fenerbahce|beşiktaş|besiktas|başakşehir|basaksehir|alanyaspor|samsunspor|rizespor|göztepe|goztepe|konyaspor|gaziantep|eyüpspor|eyupspor|kayserispor|kasımpaşa|kasimpasa|kocaelispor/i;
+const MATCH_CONTEXT = /maç|karşılaş|derbi|rakip|deplasman|yendi|yenildi|mağlup|galip|berabere|skor|puan|\\bvs\\b|\\b\\d+\\s*[-:]\\s*\\d+\\b/i;
 
 /** Headlines + short excerpts from publishers' public RSS feeds, always linking back to the source. */
 export const rssNewsProvider: NewsProvider = {
@@ -15,10 +17,10 @@ export const rssNewsProvider: NewsProvider = {
     note: "Yayıncıların herkese açık RSS akışları",
   },
   async getNews() {
-    // 4 feeds — within the 6-connection budget.
+    // Six public feeds; headlines are screened before they reach the page.
     const results = await Promise.allSettled(
       NEWS_FEEDS.map(async (f) =>
-        parseRss(await fetchText(f.url), f, { filter: f.filter ? TS_FILTER : undefined }),
+        parseRss(await fetchText(f.url), f, { filter: f.filter ? TS_FILTER : undefined, exclude: OTHER_CLUB_FILTER, allowExcluded: MATCH_CONTEXT }),
       ),
     );
     const ok = results.filter((r) => r.status === "fulfilled");
