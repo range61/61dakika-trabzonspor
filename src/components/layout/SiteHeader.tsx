@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Home, Menu } from "lucide-react";
 import { useState } from "react";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,10 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
         <Link to="/" className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <Wordmark />
+        </Link>
+        <Link to="/" activeOptions={{ exact: true }} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#7a1f3d]/20 bg-[#7a1f3d]/[0.06] px-2.5 py-2 text-xs font-semibold text-[#7a1f3d] transition-colors hover:bg-[#7a1f3d]/10 sm:px-3" aria-label="Ana sayfaya git">
+          <Home className="h-4 w-4" />
+          <span className="hidden sm:inline">Ana Sayfa</span>
         </Link>
 
         <nav aria-label="Ana menü" className="ml-auto hidden lg:block">
