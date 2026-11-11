@@ -326,3 +326,8 @@ body:has(.fan-home) footer.mt-20 { display: none; }
 .fan-instagram-logo{position:relative;inset:auto;display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:center;border:0;border-radius:50%;filter:none}
 .fan-instagram-tags{display:none!important}
 @media(max-width:600px){.fan-instagram{grid-template-columns:1fr;gap:18px}.fan-instagram-art{width:132px;height:132px;min-height:132px;flex-basis:132px}.fan-instagram-logo{width:100%;height:100%}}
+
+
+/* Instagram profil amblemini biraz daha kompakt tut */
+.fan-instagram-art{width:108px;height:108px;min-height:108px;flex-basis:108px}
+@media(max-width:600px){.fan-instagram-art{width:104px;height:104px;min-height:104px;flex-basis:104px}}
