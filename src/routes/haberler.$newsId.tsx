@@ -48,7 +48,11 @@ function NewsDetail() {
           <time dateTime={item.publishedAt ?? undefined}>{formatDateYear(item.publishedAt)} · {formatDateTimeShort(item.publishedAt).split(" ").pop()}</time>
         </div>
         <h1 className="mt-4 text-2xl font-semibold leading-tight text-foreground sm:text-3xl">{item.title}</h1>
-        {item.excerpt && <p className="mt-4 text-base leading-relaxed text-foreground/80">{item.excerpt}</p>}
+        {item.articleContent ? (
+          <div className="mt-5 whitespace-pre-line text-base leading-8 text-foreground/85">{item.articleContent}</div>
+        ) : (
+          item.excerpt && <p className="mt-4 text-base leading-relaxed text-foreground/80">{item.excerpt}</p>
+        )}
 
         <p className="mt-5 border-t border-border/60 pt-4 text-xs text-muted-foreground">
           Kaynak: {item.source.name}
