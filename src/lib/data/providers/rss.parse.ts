@@ -37,7 +37,7 @@ function tag(xml: string, name: string): string {
 }
 
 /** Short excerpt — capped well below article length; we never republish full text. */
-export function excerpt(text: string, max = 200): string {
+export function excerpt(text: string, max = 380): string {
   if (text.length <= max) return text;
   const cut = text.slice(0, max);
   const lastSpace = cut.lastIndexOf(" ");
