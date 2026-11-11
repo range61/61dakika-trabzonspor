@@ -312,3 +312,10 @@ body:has(.fan-home) footer.mt-20 { display: none; }
 .fan-instagram-logo{display:block;width:min(100%,220px);height:auto;max-height:190px;object-fit:contain;border-radius:12px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.28))}
 .fan-instagram-art{padding:14px}
 @media(max-width:600px){.fan-instagram-logo{width:min(100%,190px);max-height:170px}}
+
+
+/* Instagram alaninda yalnizca amblem: kucuk, dairesel ve kirpilmadan okunakli */
+.fan-instagram-art{position:relative;width:112px;height:112px;min-height:112px;margin:0 auto;padding:0;overflow:hidden;border:2px solid #9a3655;border-radius:50%;background:#f4f1ef;box-shadow:0 7px 22px rgba(0,0,0,.3),0 0 0 5px rgba(139,39,68,.16)}
+.fan-instagram-logo{position:absolute;left:-60%;top:-39%;width:220%;height:220%;max-width:none;max-height:none;object-fit:cover;border-radius:0;filter:none}
+.fan-instagram-tags{display:none}
+@media(max-width:600px){.fan-instagram-art{width:96px;height:96px;min-height:96px}.fan-instagram-logo{width:220%;height:220%;left:-60%;top:-39%}}
