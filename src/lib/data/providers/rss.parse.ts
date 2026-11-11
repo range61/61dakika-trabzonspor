@@ -81,7 +81,10 @@ export function parseRss(
     const title = clean(tag(raw, "title"));
     const link = clean(tag(raw, "link")) || clean(tag(raw, "guid"));
     if (!title || !/^https?:\/\//.test(link)) continue;
-    const desc = clean(tag(raw, "description"));
+    const desc = clean(tag(raw, "description"))
+      .replace(/(?:devamı|detaylar|haberin devamı) için (?:tıklayınız|tıklayın|okuyunuz|buraya tıklayın)[.!…]*/gi, "")
+      .replace(/\s+/g, " ")
+      .trim();
     if (opts.filter && !opts.filter.test(lower(title))) continue;
     if (opts.exclude?.test(lower(title)) && !opts.allowExcluded?.test(lower(title))) continue;
     const pub = clean(tag(raw, "pubDate"));
