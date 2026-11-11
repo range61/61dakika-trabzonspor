@@ -27,7 +27,7 @@ export const Route = createFileRoute("/haberler/")({
     kaynak: typeof s.kaynak === "string" && s.kaynak ? s.kaynak : undefined,
   }),
   head: () =>
-    seo("Trabzonspor haberleri", "Trabzonspor ile ilgili son haber başlıkları ve kısa özetler; her haber yayıncısının sitesine bağlanır."),
+    seo("Trabzonspor haberleri", "Trabzonspor gündeminden doğrulanmış, tamamlanmış haber içerikleri ve kaynak bilgileri."),
   loader: ({ context }) => context.queryClient.ensureQueryData(newsQuery()).then(() => undefined),
   component: NewsPage,
   errorComponent: RouteError,
