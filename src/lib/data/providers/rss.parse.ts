@@ -44,10 +44,9 @@ export function excerpt(text: string): string {
 function isTeaser(text: string): boolean {
   const value = text.trim();
   if (!value) return true;
-  return /(?:…|\\.{2,}|devamı için|devamı haberimizde|işte detaylar|detaylar haberimizde|tıklayınız|tıklayın)\\s*$/i.test(value)
+  return /(?:…|\.{2,}|devamı için|devamı haberimizde|işte detaylar|detaylar haberimizde|tıklayınız|tıklayın)\s*$/i.test(value)
     || /(?:devamı|haberin tamamı) için (?:tıklayınız|tıklayın)/i.test(value);
 }
-
 /** FNV-1a 32-bit hash → base36. Stable id for a link. */
 export function hashId(s: string): string {
   let h = 0x811c9dc5;
@@ -95,7 +94,7 @@ export function parseRss(
     const encodedBody = tag(raw, "content:encoded") || tag(raw, "content");
     const articleContent = encodedBody ? clean(encodedBody) : null;
     const usableBody = articleContent && articleContent.length > 250 ? articleContent : null;
-    if (!usableBody && isTeaser(desc)) continue;
+    if (!usableBody && (isTeaser(title) || isTeaser(desc))) continue;
     const pub = clean(tag(raw, "pubDate"));
     const d = pub ? new Date(pub) : null;
     out.push({
