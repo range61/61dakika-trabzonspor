@@ -27,7 +27,7 @@ export function PlayerAvatar({
         loading="lazy"
         onError={() => setFailed(true)}
         style={{ width: size, height: size }}
-        className={cn("shrink-0 rounded-full bg-muted object-cover", className)}
+        className={cn("shrink-0 rounded-full bg-muted object-cover object-[center_18%]", className)}
       />
     );
   }
