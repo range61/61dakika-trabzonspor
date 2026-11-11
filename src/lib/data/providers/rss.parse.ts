@@ -73,7 +73,7 @@ export function categorize(title: string, text = ""): NewsCategory {
 export function parseRss(
   xml: string,
   source: { name: string; home: string },
-  opts: { filter?: RegExp } = {},
+  opts: { filter?: RegExp; exclude?: RegExp; allowExcluded?: RegExp } = {},
 ): NewsItem[] {
   const items = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? [];
   const out: NewsItem[] = [];
@@ -82,7 +82,8 @@ export function parseRss(
     const link = clean(tag(raw, "link")) || clean(tag(raw, "guid"));
     if (!title || !/^https?:\/\//.test(link)) continue;
     const desc = clean(tag(raw, "description"));
-    if (opts.filter && !opts.filter.test(lower(`${title} ${desc}`))) continue;
+    if (opts.filter && !opts.filter.test(lower(title))) continue;
+    if (opts.exclude?.test(lower(title)) && !opts.allowExcluded?.test(lower(title))) continue;
     const pub = clean(tag(raw, "pubDate"));
     const d = pub ? new Date(pub) : null;
     out.push({
