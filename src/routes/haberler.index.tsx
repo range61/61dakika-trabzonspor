@@ -39,7 +39,7 @@ function NewsPage() {
       <PageHeader
         eyebrow="Haberler"
         title="Trabzonspor gündemi"
-        description="Yayıncıların herkese açık akışlarından başlıklar ve kısa özetler. Haberin tamamı her zaman kaynağında okunur."
+        description="Trabzonspor’u doğrudan ilgilendiren haberler. Başka takımlarla ilgili olup yalnızca Trabzonspor adı geçen içerikler filtrelenir; haberleri kategoriye ve kaynağa göre süzebilirsin."
       />
       <div className="mt-6">
         <Section errorTitle="Haberler yüklenemedi" fallback={<ListSkeleton rows={6} height={120} />}>
