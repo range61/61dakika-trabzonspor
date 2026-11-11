@@ -1,11 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Container } from "@/components/common/PageHeader";
 import { RouteError, RouteNotFound } from "@/components/common/States";
 import { NewsCard } from "@/components/news/NewsCard";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { NEWS_CATEGORIES } from "@/lib/data/config";
 import { newsQuery } from "@/lib/data/queries";
 import { formatDateTimeShort, formatDateYear } from "@/lib/format";
@@ -51,19 +50,12 @@ function NewsDetail() {
         <h1 className="mt-4 text-2xl font-semibold leading-tight text-foreground sm:text-3xl">{item.title}</h1>
         {item.excerpt && <p className="mt-4 text-base leading-relaxed text-foreground/80">{item.excerpt}</p>}
 
-        <div className="surface mt-6 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-muted-foreground">
-            Bu sayfada yalnızca başlık ve kısa özet yer alır. Haberin tamamı ve görselleri{" "}
-            <a href={item.source.url} target="_blank" rel="noopener noreferrer" className="font-medium text-foreground underline-offset-2 hover:underline">
-              {item.source.name}
-            </a>{" "}
-            sitesine aittir.
+        <div className="surface mt-6 p-4">
+          <p className="text-sm font-semibold">61Dakika haber özeti</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Bu içerik, {item.source.name} tarafından herkese açık haber akışında paylaşılan başlık ve kısa açıklamadan derlenmiştir. Kaynakta bulunmayan ayrıntılar eklenmemiştir.
           </p>
-          <Button asChild className="shrink-0">
-            <a href={item.url} target="_blank" rel="noopener noreferrer">
-              Haberin tamamı <ArrowUpRight />
-            </a>
-          </Button>
+          <p className="mt-3 text-xs text-muted-foreground">Kaynak: {item.source.name} · İçerik 61Dakika içinde görüntüleniyor.</p>
         </div>
       </article>
 
