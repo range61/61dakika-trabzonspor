@@ -302,7 +302,7 @@ body:has(.fan-home) footer.mt-20 { display: none; }
 .fan-instagram-cta:hover{transform:translateY(-2px);background:#a6385b}
 .fan-instagram-art{position:relative;display:flex;min-height:150px;flex-direction:column;align-items:center;justify-content:center;gap:15px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(0,0,0,.12));}
 .fan-instagram-mark{display:flex;align-items:center;gap:10px}
-.fan-instagram-mark span{display:grid;width:65px;height:65px;place-items:center;border:2px solid #9ac9ed;border-radius:19px;background:linear-gradient(145deg,#2584c7,#07518c);color:#fff;font-family:var(--font-display);font-size:32px;font-weight:900;box-shadow:0 7px 22px rgba(15,91,148,.38)}
+.fan-instagram-mark span{display:grid;width:65px;height:65px;place-items:center;border:2px solid #c58aa0;border-radius:19px;background:linear-gradient(145deg,#3188bd 0%,#17699f 58%,#762742 100%);color:#fff;font-family:var(--font-display);font-size:32px;font-weight:900;box-shadow:0 7px 22px rgba(15,91,148,.28),inset 0 -5px 0 rgba(120,35,66,.45)}
 .fan-instagram-mark small{color:#fff;font-family:var(--font-display);font-size:24px;font-weight:900;letter-spacing:.04em}
 .fan-instagram-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
 .fan-instagram-tags span{padding:5px 8px;border:1px solid rgba(255,255,255,.12);border-radius:99px;color:#d8c4cc;font-size:9px;font-weight:800;letter-spacing:.1em}
