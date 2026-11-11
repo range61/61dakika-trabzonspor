@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { NEWS_CATEGORIES } from "@/lib/data/config";
 import type { NewsItem } from "@/lib/data/types";
@@ -23,14 +22,9 @@ export function NewsCard({ item, compact = false }: { item: NewsItem; compact?: 
       </h3>
       {!compact && item.excerpt && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{item.excerpt}</p>}
       <div className="mt-auto pt-4">
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-10 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary"
-        >
-          Haberi kaynağında oku <ArrowUpRight className="h-3.5 w-3.5" />
-        </a>
+        <span className="relative z-10 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+          61Dakika'da oku
+        </span>
       </div>
     </article>
   );
