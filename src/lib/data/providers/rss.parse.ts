@@ -36,12 +36,16 @@ function tag(xml: string, name: string): string {
   return m ? m[1] : "";
 }
 
-/** Short excerpt — capped well below article length; we never republish full text. */
-export function excerpt(text: string, max = 380): string {
-  if (text.length <= max) return text;
-  const cut = text.slice(0, max);
-  const lastSpace = cut.lastIndexOf(" ");
-  return `${cut.slice(0, lastSpace > 120 ? lastSpace : max).replace(/[,;:.\s]+$/, "")}…`;
+/** Keep the complete publisher-supplied description; visual previews are clamped by the card UI. */
+export function excerpt(text: string): string {
+  return text.trim();
+}
+
+function isTeaser(text: string): boolean {
+  const value = text.trim();
+  if (!value) return true;
+  return /(?:…|\\.{2,}|devamı için|devamı haberimizde|işte detaylar|detaylar haberimizde|tıklayınız|tıklayın)\\s*$/i.test(value)
+    || /(?:devamı|haberin tamamı) için (?:tıklayınız|tıklayın)/i.test(value);
 }
 
 /** FNV-1a 32-bit hash → base36. Stable id for a link. */
@@ -87,16 +91,18 @@ export function parseRss(
       .trim();
     if (opts.filter && !opts.filter.test(lower(title))) continue;
     if (opts.exclude?.test(lower(title)) && !opts.allowExcluded?.test(lower(title))) continue;
-    // Full article text is used only when the publisher explicitly includes it in RSS.
+    // Prefer full body supplied directly in RSS. Never present an unfinished teaser as a complete story.
     const encodedBody = tag(raw, "content:encoded") || tag(raw, "content");
     const articleContent = encodedBody ? clean(encodedBody) : null;
+    const usableBody = articleContent && articleContent.length > 250 ? articleContent : null;
+    if (!usableBody && isTeaser(desc)) continue;
     const pub = clean(tag(raw, "pubDate"));
     const d = pub ? new Date(pub) : null;
     out.push({
       id: hashId(link),
       title,
       excerpt: excerpt(desc && lower(desc) !== lower(title) ? desc : ""),
-      articleContent: articleContent && articleContent.length > 120 ? articleContent : null,
+      articleContent: usableBody,
       url: link,
       source: { name: source.name, url: source.home },
       publishedAt: d && !Number.isNaN(d.getTime()) ? d.toISOString() : null,
